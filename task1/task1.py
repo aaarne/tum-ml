@@ -1,34 +1,73 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 
 import matplotlib.pyplot as plt
 import numpy as np
+from decision_tree import DecisionTree
+from mpl_toolkits.mplot3d import Axes3D
 
-filename = "01_homework_dataset.csv"
-data = np.loadtxt(filename, delimiter=",")
-print(data)
+def load_data():
+    filename = "01_homework_dataset.csv"
+    raw_data = np.loadtxt(filename, delimiter=',')
+    data = raw_data[:,:-1]
+    classes = np.array(raw_data[:,-1], dtype=int)
+    print("Data:{}".format(data))
+    print("Classes:{}".format(classes))
+    return data, classes
 
-def plot2d(data):
+
+def plot2d(data, classes):
         f = plt.figure()
         ax1 = f.add_subplot(221)
-        ax1.scatter([p[0] for p in data], [p[1] for p in data], c=[p[3] for p in data])
+        ax1.scatter([p[0] for p in data], [p[1] for p in data], c=[classlabel for classlabel in classes])
         ax1.set_xlabel("X")
         ax1.set_ylabel("Y")
         ax1.set_title("XY")
 
         ax2 = f.add_subplot(222)
-        ax2.scatter([p[0] for p in data], [p[2] for p in data], c=[p[3] for p in data])
+        ax2.scatter([p[0] for p in data], [p[2] for p in data], c=[classlabel for classlabel in classes])
         ax2.set_xlabel("X")
         ax2.set_ylabel("Z")
         ax2.set_title("XZ")
 
         ax3 = f.add_subplot(223)
-        ax3.scatter([p[1] for p in data], [p[2] for p in data], c=[p[3] for p in data])
+        ax3.scatter([p[1] for p in data], [p[2] for p in data], c=[classlabel for classlabel in classes])
         ax3.set_xlabel("Y")
         ax3.set_ylabel("Z")
         ax3.set_title("YZ")
 
         f.tight_layout()
+        return f
 
-plot2d(data)
-plt.show()
+
+def plot3d(data, classes):
+    f = plt.figure()
+    ax = f.add_subplot(111, projection='3d')
+    ax.scatter([p[0] for p in data], [p[1] for p in data], [p[2] for p in data], c=[classlabel for classlabel in classes])
+    return f
+
+if __name__ == '__main__':
+    data, classes = load_data()
+    f = plot3d(data, classes)
+    f = plot2d(data, classes)
+    tree = DecisionTree(data, classes, maxDepth=1)
+
+    v1 = np.array([4.1, -0.1, 2.2])
+    v2 = np.array([6.1, 0.4, 1.6])
+
+    print("Prediction for {}: {}".format(v1, tree.predict(v1)))
+    print("Prediction for {}: {}".format(v2, tree.predict(v2)))
+
+    newdata = list()
+    newclasses = list()
+    for x1 in np.linspace(0, 10, 10):
+        for x2 in np.linspace(-1, 1, 10):
+            for x3 in np.linspace(0, 6, 10):
+                v = np.array([x1, x2, x3])
+                newdata.append(v)
+                newclasses.append(tree.predict(v))
+    f2 = plot3d(newdata, newclasses)
+
+
+    plt.show()
+
 
