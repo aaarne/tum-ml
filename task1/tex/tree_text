@@ -1,0 +1,22 @@
+Decision Tree:
+    Gini Index: 0.6577777777777777
+    Class Distribution: {0: 5, 1: 6, 2: 4}
+    Is Leaf: False
+    Split at value 4.1 in dimension 0
+    Left:
+        Gini Index: 0.0
+        Class Distribution: {1: 6}
+        Is Leaf: True
+    Right:
+        Gini Index: 0.49382716049382713
+        Class Distribution: {0: 5, 2: 4}
+        Is Leaf: False
+        Split at value 6.9 in dimension 0
+        Left:
+            Gini Index: 0.4444444444444444
+            Class Distribution: {0: 2, 2: 4}
+            Is Leaf: True
+        Right:
+            Gini Index: 0.0
+            Class Distribution: {0: 3}
+            Is Leaf: True
