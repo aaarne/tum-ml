@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from decision_tree import DecisionTree
 from mpl_toolkits.mplot3d import Axes3D
+from knn import KNN
 
 def load_data():
     filename = "01_homework_dataset.csv"
@@ -68,6 +69,14 @@ if __name__ == '__main__':
     f2 = plot3d(newdata, newclasses)
 
     tree.print_tree()
+
+    print()
+    print()
+    print()
+
+    knn = KNN(1, data, classes)
+    for x in [v1, v2]:
+        print("KNN prediction for {}: {}".format(x, knn.predict(x)))
 
     plt.show()
 
