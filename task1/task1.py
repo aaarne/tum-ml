@@ -49,7 +49,7 @@ if __name__ == '__main__':
     data, classes = load_data()
     f = plot3d(data, classes)
     f = plot2d(data, classes)
-    tree = DecisionTree(data, classes, maxDepth=1)
+    tree = DecisionTree(data, classes, maxDepth=2)
 
     v1 = np.array([4.1, -0.1, 2.2])
     v2 = np.array([6.1, 0.4, 1.6])
@@ -67,6 +67,7 @@ if __name__ == '__main__':
                 newclasses.append(tree.predict(v))
     f2 = plot3d(newdata, newclasses)
 
+    tree.print_tree()
 
     plt.show()
 

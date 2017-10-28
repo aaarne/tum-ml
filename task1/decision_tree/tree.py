@@ -18,21 +18,28 @@ class DecisionTreeNode(object):
     def __init__(self, classlabel):
         self.classlabel = classlabel
         self.isLeaf = True
+        self.gini = -1
+        self.dist = dict()
 
     def _add_split(self, split, data, classes):
         self.isLeaf = False
         self.split = split
-        leftclasses = np.array([classes[i] for i in range(len(classes)) if split.is_left(data[i])])
-        rightclasses = np.array([classes[i] for i in range(len(classes)) if split.is_right(data[i])])
-        self.left = DecisionTreeNode(np.bincount(leftclasses).argmax())
-        self.right = DecisionTreeNode(np.bincount(rightclasses).argmax() if len(rightclasses)>0 else 0)
-        return leftclasses, rightclasses
+        leftindices = [index for index in range(len(data)) if self.split.is_left(data[index])]
+        rightindices = [index for index in range(len(data)) if self.split.is_right(data[index])]
+        self.left = DecisionTreeNode(np.bincount(classes[leftindices]).argmax())
+        self.right = DecisionTreeNode(np.bincount(classes[rightindices]).argmax() if len(rightindices)>0 else 0)
+        self.left.gini_index(data[leftindices], classes[leftindices])
+        self.right.gini_index(data[rightindices], classes[rightindices])
+        return classes[leftindices], classes[rightindices]
 
     def gini_index(self, data, classes):
         gini = 1.0
+        self.dist = dict()
         for classlabel in np.unique(classes):
             d = (np.count_nonzero(classes == classlabel) / len(classes)) ** 2
+            self.dist[classlabel] = np.count_nonzero(classes == classlabel)
             gini -= d
+        self.gini = gini
         return gini
 
     def generate_delta_gini_distribution(self, data, classes, dim):
@@ -55,7 +62,7 @@ class DecisionTreeNode(object):
         for dim in range(ndim):
             dist = np.array([v for v in self.generate_delta_gini_distribution(data, classes, dim)])
             tit = "Distribution along dim {}".format(dim)
-            if True:
+            if False:
                 plt.figure()
                 plt.title(tit)
                 s = np.argsort(data[:,dim])
@@ -78,6 +85,7 @@ class DecisionTree(object):
 
     def compute_tree(self, data, classes, maxDepth):
         root = DecisionTreeNode(np.bincount(classes).argmax())
+        root.gini_index(data, classes)
         self.recur(root, data, classes, maxDepth)
         return root
 
@@ -104,3 +112,22 @@ class DecisionTree(object):
             return node.classlabel
         else:
             return self.predict_recur(node.left if node.split.is_left(value) else node.right, value)
+
+    def print_tree(self):
+        print()
+        print()
+        print("Decision Tree:")
+        self.print_tree_recur(self.root, 4)
+
+    def print_tree_recur(self, node, n):
+        print(' '*n + "Gini Index: {}".format(node.gini))
+        print(' '*n + "Class Distribution: {}".format(node.dist))
+        print(' '*n + "Is Leaf: {}".format(node.isLeaf))
+        if not node.isLeaf:
+            print(' '*n + "Split at value {} in dimension {}".format(node.split._value, node.split._dim))
+        if node.isLeaf:
+            return
+        print(' '*n + "Left:")
+        self.print_tree_recur(node.left, n+4)
+        print(' '*n + "Right:")
+        self.print_tree_recur(node.right, n+4)
