@@ -59,7 +59,60 @@ The following table summarises the predicted classes for the two given data poin
 See the pdf pages attached.
 
 \section{Problem 4}
+Using the array function of the numpy library, the $k$NN algorithm can be implemented straightforwardly. The following source code shows the implemented $k$NN implementation.\pagebreak
+The predicted class labels for the vectors $\mathbf{x}_a$ and $\mathbf{x}_b$ equal to $2$.
+
+\lstinputlisting[keywordstyle=\color{blue},breaklines=true,caption={Implementation of the $k$NN algorithm.},language=python]{KNN.py}
+
+\begin{table}[h]
+	\centering
+
+	\begin{tabular}{l|c}
+	\hline
+
+	\hline
+	\textbf{Data Point} $\mathbf{x}$ & \textbf{Predicted Class} $y$\\
+	\hline
+		 $\mathbf{x_a} = \begin{pmatrix}
+		 	4.1 & -0.1 & 2.2
+		 \end{pmatrix}^\top$& $y_a = 2$\\
+	\hline
+		$\mathbf{x_b} = \begin{pmatrix}
+			6.1 & 0.4 & 1.3
+		\end{pmatrix}^\top$ & $y_b = 2$\\
+
+	\hline
+	\end{tabular}
+	\caption{Predicted classes for the given data points by $k$NN classifier.}
+	\label{tab:class_predictions}
+\end{table}
+
 \section{Problem 5}
+Here the 3-NN classifier is used for regression. Both unweighted and weighted regression are compared. The weighted 3-NN regression uses the euclidean distance in order to determine the weights.
+
+\begin{table}[h]
+	\centering
+
+	\begin{tabular}{l|c|c}
+	\hline
+
+	\hline
+	\textbf{Data Point} $\mathbf{x}$ & \textbf{Unweighted Regression Result} $y$ & \textbf{Weighted Regression Result} $y_w$\\
+	\hline
+		 $\mathbf{x_a} = \begin{pmatrix}
+		 	4.1 & -0.1 & 2.2
+		 \end{pmatrix}^\top$& $y_a = 1.0$ & $y_{w,a} = 1.61$\\
+	\hline
+		$\mathbf{x_b} = \begin{pmatrix}
+			6.1 & 0.4 & 1.3
+		\end{pmatrix}^\top$ & $y_b = 1.33$ & $y_{w,b} = 1.36$\\
+
+	\hline
+	\end{tabular}
+	\caption{$k$NN for Regression. Predicted values for unweighted and weighted regression are presented.}
+	\label{tab:class_predictions}
+\end{table}
+
 \section{Problem 6}
 
 \includepdf[pages=-]{01_homework_knn.pdf}

@@ -23,18 +23,21 @@ def plot2d(data, classes):
         ax1.set_xlabel("X")
         ax1.set_ylabel("Y")
         ax1.set_title("XY")
+        ax1.set_aspect('equal')
 
         ax2 = f.add_subplot(222)
         ax2.scatter([p[0] for p in data], [p[2] for p in data], c=[classlabel for classlabel in classes])
         ax2.set_xlabel("X")
         ax2.set_ylabel("Z")
         ax2.set_title("XZ")
+        ax2.set_aspect('equal')
 
         ax3 = f.add_subplot(223)
         ax3.scatter([p[1] for p in data], [p[2] for p in data], c=[classlabel for classlabel in classes])
         ax3.set_xlabel("Y")
         ax3.set_ylabel("Z")
         ax3.set_title("YZ")
+        ax3.set_aspect('equal')
 
         f.tight_layout()
         return f
@@ -74,9 +77,18 @@ if __name__ == '__main__':
     print()
     print()
 
-    knn = KNN(1, data, classes)
+    print("KNN Classifier")
+    knn = KNN(3, data, classes)
     for x in [v1, v2]:
         print("KNN prediction for {}: {}".format(x, knn.predict(x)))
+
+    print("KNN Regression")
+    for x in [v1, v2]:
+        print("KNN regression for {}: {}".format(x, knn.regression(x)))
+
+    print("KNN Weighted Regression")
+    for x in [v1, v2]:
+        print("Weighted KNN regression for {}: {}".format(x, knn.weighted_regression(x)))
 
     plt.show()
 
