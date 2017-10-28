@@ -114,6 +114,17 @@ Here the 3-NN classifier is used for regression. Both unweighted and weighted re
 \end{table}
 
 \section{Problem 6}
+Plotting the dataset reveals the distribution over the space. Figure~\ref{fig:2d} shows scatter plots of the data points as projections onto the three planes spanned by the principal axes. Obviously the feature spaces in the data set are completely different. Different scales and distributions are present. The Euclidean distance is like comparing apples and pears in this example. Another distance metric like the \emph{Mahalanobis} distance promise a better results as this metric explicitly models different variances among different axes. Alternatively, the data can be preprocessed and scales to unit-variance per axis.
+
+As the decision tree algorithm determines the decision threshold and dimensions based on measures like the entropy or the Gini-index, which are independent of the actual values in the feature space, decision trees are robust against different scales in the feature space.
+
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[height=8cm]{2d.png}
+	\caption{Plot of the dataset as projections onto the principal planes.}
+	\label{fig:2d}
+\end{figure}
 
 \includepdf[pages=-]{01_homework_knn.pdf}
 
