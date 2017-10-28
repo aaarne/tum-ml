@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 filename = "01_homework_dataset.csv"
 data = np.loadtxt(filename, delimiter=",")
-print data
+print(data)
 
 def plot2d(data):
         f = plt.figure()
