@@ -24,7 +24,7 @@ class KNN():
         si = np.argsort(distances)
         weightsum, sum = 0.0, 0.0
         for i in range(self.k):
-            dist = 1.0/distances[si[i]]
-            weightsum += dist
-            sum += dist * float(self.labels[i])
+            weight = 1.0/distances[si[i]]
+            weightsum += weight
+            sum += weight * float(self.labels[si[i]])
         return sum / weightsum

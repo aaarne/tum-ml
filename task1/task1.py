@@ -56,7 +56,7 @@ if __name__ == '__main__':
     tree = DecisionTree(data, classes, maxDepth=2)
 
     v1 = np.array([4.1, -0.1, 2.2])
-    v2 = np.array([6.1, 0.4, 1.6])
+    v2 = np.array([6.1, 0.4, 1.3])
 
     print("Prediction for {}: {}".format(v1, tree.predict(v1)))
     print("Prediction for {}: {}".format(v2, tree.predict(v2)))
@@ -81,10 +81,6 @@ if __name__ == '__main__':
     knn = KNN(3, data, classes)
     for x in [v1, v2]:
         print("KNN prediction for {}: {}".format(x, knn.predict(x)))
-
-    print("KNN Regression")
-    for x in [v1, v2]:
-        print("KNN regression for {}: {}".format(x, knn.regression(x)))
 
     print("KNN Weighted Regression")
     for x in [v1, v2]:
