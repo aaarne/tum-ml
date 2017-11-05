@@ -1,0 +1,180 @@
+\documentclass{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{amsmath,amssymb}
+
+\newcommand{\qed}{\hfill $\blacksquare$}
+
+\lstset{frame=single,keepspaces=true,captionpos=b}
+
+\title{Homework 02 - Probability Theory}
+\author{Arne Sachtler - \textit{Registration Number: 03692662}}
+\date{\today}
+\subtitle{IN2064 Machine Learning}
+
+\begin{document}
+\maketitle
+
+\section{Basic Probability} % (fold)
+\label{cha:basic_probability}
+
+\subsection{Problem 1} % (fold)
+\label{sec:problem_1}
+
+Introducing event variables as
+\begin{equation}
+	T: \text{person is a terrorist} \, 
+\end{equation} and
+\begin{equation}
+	S: \text{person is assessed as terrorist}
+\end{equation}
+leads to a formal specification of the knowledge provided in the textual description as
+\begin{equation}
+	P(S|T) = 95 \% \quad \text{,} \quad P(\bar{S}|\bar{T}) = 95\% \quad \text{and} \quad P(T)=1\%. 
+\end{equation}
+
+In order to determine the probability that the person next to me actually is a terrorist, the conditional probability $P(T|S)$ is required. Applying Bayes' rule yields
+\begin{eqnarray}
+	P(T|S) &=& \frac{P(S|T) P(T)}{P(S)} \\
+	&=& \frac{P(S|T) P(T)}{\sum_{A\in \left\{T, \bar{T}\right\}} P(A) P(S|A)}\\
+	&=& \frac{95\% \cdot 1\%}{1\% \cdot 95\% + 99\% \cdot 5\%}\\
+	&\approx& 16.1\%
+\end{eqnarray}
+Lucky me, the person next to me is a terrorist by only 16\%.
+
+\subsection{Problem 2} % (fold)
+\label{sec:problem_2}
+Let the random variable $C$ be the amount of red balls placed into the box and $D$ the amount of red balls drawn from the box.
+$C$ and $D$ are Binomial distributed as follows
+\begin{eqnarray}
+C&\sim&Bin\left(2, \frac{1}{2}\right)\\
+D&\sim&Bin\left(3, \mu_r\right) \, ,	
+\end{eqnarray}
+where the parameter $\mu_r$ denotes the probability of drawing a red ball from the box. This parameter is dependent on the amount of red balls in the box.
+Formally the required conditional probability can be expressed in terms of those random variables as $p(C=2 | D=3)$.
+Again, Bayes' rule can be applied in order to compute the final conditional probability. The law of marginal probability is used and the parameter $\mu_r$ is adopted for each case.
+In the following equations let $B(k|N,\mu)$ be the short form of $Bin(k|N,\mu)$.
+
+\begin{eqnarray}
+p(C=2 | D=3) &=& \frac{p(D=3 | C=2) \, p(C=2)}{\sum_{k=0}^{2} p(D=3 | C=k) \, p(C=k)}\\
+&=& \frac{B(3|3,1) \, B(2|2, 0.5)}{B(3|3,0) \, B(0|2, 0.5) + B(3|3,0.5) \, B(1|2, 0.5) + B(3|3,1) \, B(2|2,0.5)}\\
+&=& \frac{1 \cdot \frac{1}{4}}{0\cdot \frac{1}{4} + \frac{1}{8} \cdot \frac{1}{2} + 1 \cdot \frac{1}{4}}\\
+&=& \frac{4}{5} = 80\% \, .\\
+\end{eqnarray}
+
+Under the observation of drawing three times a red ball from the box, the probability that initially two of the two balls placed in the box were red is 80\%.
+\subsection{Problem 3} % (fold)
+\label{sec:problem_3}
+Let $N$ be the random variable modelling the trial until at first the head appears.
+The probability, that a head appears after the first trial is $p$. 
+Afterwards, the probability that the first head appears after the second trial is $p (1-p)$.
+Therefore, the probability for the first head appearing after the n-th trial is
+\begin{equation}
+	p(N = n) = p (1-p)^{n-1} \, .
+\end{equation}
+In this case, for the fair coin, $p$ equal $\frac{1}{2}$ and $p(N = n)$ can be simplified to
+\begin{equation}
+	p(N = n) = \left(\frac{1}{2}\right)^{n} = \frac{1}{2^n} \, .
+\end{equation}
+The function evaluating the number of trials after $n$ trial is simply the identity:
+\begin{equation}
+	g(n) = n \, .
+\end{equation}
+Finally, the expected value of trial $E\left[g(n)\right]$ can be computed by
+\begin{eqnarray}
+	E\left[g(n)\right] &=& \sum\limits_{k=1}^{\infty}\frac{n}{2^n} = 2	
+\end{eqnarray}
+The expected number of heads is of course one, a each run of the experiment terminates after the first heads appeared:
+\begin{equation}
+	E\left[H\right] = 1 \, .
+\end{equation}
+Provided the first heads appeared after $n$ trials, $n-1$ tails have been observed in advance.
+Therefore the expected number of tails is expressed by the following sum
+\begin{eqnarray}
+	E\left[T\right] &=& \sum\limits_{k=1}^\infty \frac{n-1}{2^n} \\
+	&=& \sum\limits_{k=1}^{\infty}\frac{n}{2^n} - \sum\limits_{k=1}^{\infty}\frac{1}{2^n}\\
+	&=& 2 - 1 = 1 \, .
+\end{eqnarray}
+
+
+\subsection{Problem 4} % (fold)
+	\label{sec:problem_4}
+
+For the expected value, the fact is used that $p(x) = 0$ for $x<a$ and $x>b$. First the expected value:
+\begin{eqnarray}
+E\left[X\right] &=& \int\limits_{-\infty}^\infty s p(s) ds = \frac{1}{b-a}\int\limits_{a}^b s ds\\
+&=& \frac{1}{b-a} \left(\frac{1}{2}b^2 - \frac{1}{2}a^2\right)\\
+&=& \frac{\left(b+a\right)\left(b-a\right)}{2\left(b-a\right)}\\
+&=& \frac{b+a}{2} \, .
+\end{eqnarray}
+And for the variance:
+\begin{eqnarray}
+Var\left[X\right] &=& E\left[X^2\right] - E\left[X\right]^2\\
+&=& \int\limits_{-\infty}^\infty s^2p(s)ds - \left(\int\limits_{-\infty}^\infty s p(s) ds\right)^2\\
+&=& \frac{1}{b-a}\int\limits_a^b s^2ds - \frac{\left(a+b\right)^2}{4}\\
+&=& \frac{1}{b-a}\left(\frac{1}{3}b^3 - \frac{1}{3}a^3\right) - \frac{\left(a+b\right)^2}{4}\\
+&=& \frac{b^3 - a^3}{3\left(b-a\right)} - \frac{\left(a+b\right)^2}{4}\\
+&=& \frac{4b^3 - 4a^3 - \left(3a^2 + 6ab + 3b^2\right)\left(b-a\right)}{12\left(b-a\right)}\\
+&=& \frac{b^3 - 3ab^2 + 3a^2b - a^3}{12\left(b-a\right)}\\
+&=& \frac{\left(b-a\right)^2}{12}
+\end{eqnarray}
+\subsection{Problem 5} % (fold)
+	\label{sec:problem_5}
+
+First the expected value. 
+Using the law of marginal probability
+\begin{equation}
+	\int p(x|y)p(y)dy = p(x) \, ,
+\end{equation}
+the proof can be constructed straightforwardly
+\begin{eqnarray}
+	E\left[X\right] &=& E_Y\left[E_{X|Y}\left[X\right]\right]\\
+	&=& \int E_{X|Y}\left[X\right]p(y)dy\\
+	&=& \iint x p(x|y) p(y) \, dx\,  dy\\
+	&=& \int x p(x) dx\\
+	&=& E\left[X\right] \, .
+\end{eqnarray}
+
+Using the equalities
+\begin{equation}
+	E_Y\left[Var_{X|Y}\left[X\right]\right] = \iint x^2 p(x|y)p(y)dxdy - \int \left(\int x p(x|y)dx\right)^2p(y)dy
+\end{equation}
+and 
+\begin{equation}
+	Var_Y\left[E_{X|Y}\left[X\right]\right] = \int \left(\int x p(x|y)dx\right)^2p(y)dy - \left(\iint x(p(x|y)p(y)dx dy\right)^2
+\end{equation}
+
+the tower probability for the variance is proven
+\begin{eqnarray}
+& E_Y\left[Var_{X|Y}\left[X\right]\right] + Var_Y\left[E_{X|Y}\left[X\right]\right]\\ 
+=& \iint x^2 p(x|y)p(y)dxdy - \int \left(\int x p(x|y)dx\right)^2p(y)dy\\
++& \int \left(\int x p(x|y)dx\right)^2p(y)dy - \left(\iint x(p(x|y)p(y)dx dy\right)^2\\
+=& \iint x^2 p(x|y)p(y)dxdy - \left(\iint x(p(x|y)p(y)dx dy\right)^2\\
+=& \int x^2p(x)dx - \left(\int xp(x)dx\right)^2\\
+=& E\left[X^2\right] - E\left[X\right]^2\\
+=& Var\left[X\right] \, .
+\end{eqnarray}
+\qed
+	
+\section{Probability Inequalities} % (fold)
+\label{cha:probability_inequalities}
+
+\subsection{Problem 6} % (fold)
+\label{sec:problem_6}
+
+To prove:
+\begin{equation}
+	\lim_{n\to\infty} p\left(\left|\frac{1}{n} \sum\limits_{i=1}^{n}X_i - E\left[X_i\right]\right| > \epsilon \right) = 0 \, .
+\end{equation}
+Using $X = \sum X_i$ the term can be bounded by Chebyshev’s inequality:
+\begin{eqnarray}
+		&p\left(\left|\frac{1}{n} \sum\limits_{i=1}^{n}X_i - E\left[X_i\right]\right| > \epsilon \right)\\
+		=&p\left(\left|X - E\left[X\right]\right| > n\epsilon \right)\\
+		\le& \frac{Var\left[X\right]}{n^2\epsilon^2} \, .
+\end{eqnarray}
+For $n\to\infty$ the term $\frac{Var\left[X\right]}{n^2\epsilon^2}$ goes to zero. \qed
+
+\end{document}
