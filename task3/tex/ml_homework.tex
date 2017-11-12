@@ -1,0 +1,170 @@
+\documentclass{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[UKenglish]{babel}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{amsmath,amssymb,stmaryrd}
+
+\newcommand{\qed}{\hfill $\blacksquare$}
+
+\lstset{frame=single,keepspaces=true,captionpos=b}
+
+\title{Homework 03 - Paramter Inference}
+\author{Arne Sachtler - \textit{Registration Number: 03692662}}
+\date{\today}
+\subtitle{IN2064 Machine Learning}
+
+\begin{document}
+\maketitle
+
+\section{Optimizing Likelihoods: Monotonic Transforms} % (fold)
+\label{sec:optimizing_likelihoods_monotonic_transforms}
+\subsection{Problem 1} % (fold)
+First derivative of the likelihood:
+\begin{equation}
+	\frac{d}{d\theta} \theta^t \left(1- \theta\right)^h = t \theta^{t-1}\left(1-\theta\right)^h - \theta^h h \left(1-\theta\right)^{h-1} \, .
+\end{equation}
+and the second derivative:
+\begin{eqnarray}
+	\frac{d^2}{d\theta^2} \theta^t \left(1- \theta\right)^h  &=& t(t-1)\theta^{t-2}(1-\theta)^h - ht\theta^{t-1}(1-\theta)^{h-1}\\
+	&-& ht\theta^{t-1} (1-\theta)^{h-1} + h(h-1)\theta^t (1-\theta)^{h-2} \, .
+\end{eqnarray}
+
+Compared to the derivatives of the log likelihood
+\begin{equation}
+	\frac{d}{d\theta} \ln \left(\theta^t \left(1- \theta\right)^h\right) = \frac{t}{\theta} - \frac{h}{\theta} \, ,
+\end{equation}
+and 
+\begin{equation}
+	\frac{d^2}{d\theta^2} \ln \left(\theta^t \left(1- \theta\right)^h\right) = -\frac{t}{\theta^2} + \frac{t}{\theta^2} \, .
+\end{equation}
+Due to the sums in the log likelihood the terms are much simpler.
+
+% subsection problem_1 (end)
+
+
+\subsection{Problem 2}
+Let $x_f$ be a maximum of $f(x)$, that is
+\begin{equation}
+	f'(x_f) = 0 \quad \land \quad f''(x_f) < 0 \, .
+\end{equation}
+Further, let $lf(x) = \log f(x)$ be the logarithmic function and let there be a (hypothetical) $\tilde{x}$ that is a maximum of $f(x)$ and no maximum $\log f(x)$. More formally
+\begin{equation}
+	\exists \tilde{x} \in \mathbb{R}: f'(\tilde{x}) = 0 \quad \land \quad f''(\tilde{x}) < 0 \quad \land \quad lf'(\tilde{x}) \ne 0
+\end{equation}
+Then it follows that
+\begin{equation}
+	lf'(\tilde{x}) = \left(\log f\right)'(\tilde{x}) = f'(\tilde{x}) \frac{1}{f(\tilde{x})} \ne 0 \, \lightning ,
+\end{equation}
+which is a contradiction as $f'(\tilde{x}) = 0$.
+It is proven by contraction that
+\begin{equation}
+	\forall x_f \in \mathbb{R} : f'(\tilde{x}) = 0 \quad \Leftrightarrow \quad lf'(\tilde{x}) = 0 \, .
+\end{equation}
+Consequently every maximum of $f$ is a maximum of $\log f$. \qed
+
+% section optimizing_likelihoods_monotonic_transforms (end)	
+
+\section{Properties of MLE and MAP}
+\subsection{Problem 3}
+Show 
+\begin{equation}
+	\exists p(\theta) : \theta_{MAP} = \theta_{MLE}
+\end{equation}
+We know that
+\begin{equation}
+	\theta_{MLE} = \underset{\theta}{\arg \max} \, p(D | \theta)
+\end{equation}
+and 
+\begin{equation}
+	\theta_{MAP} = \underset{\theta}{\arg \max} \, \frac{p(D|\theta) p(\theta)}{p(D)}
+\end{equation}
+Let $p(\theta) = p_0, p_0\in \mathbb{R}\backslash\left\{0\right\}$ be a constant distribution.
+Thus for $p(\theta)>0$ it holds that
+\begin{equation}
+	\theta_{MLE} = \underset{\theta}{\arg \max} \, p(D | \theta) = \underset{\theta}{\arg \max} \, \frac{p(D|\theta) p(\theta)}{p(D)} = \theta_{MAP} \, ,
+\end{equation}
+as $p(\theta) = p_0$ is constant and $p(D)$ does not depend on $\theta$.
+
+For a constant prior distribution the maximum likelihood estimate equals the maximum a posteriori estimate.
+
+\subsection{Problem 4}
+The prior is a Beta distribution with parameters $a$ and $b$. We know for the prior
+\begin{equation}
+	p(\theta) = Beta(a,b) = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a+b)} \theta^{a-1} (1-\theta)^{b-1} \, .
+\end{equation}
+Further we know that the likelihood distribution is Binomial with parameters $N$, $m$ and $\theta$:
+\begin{equation}
+	p(x=m | N, \theta) = \binom{N}{m} \theta^{m} (1-\theta)^{N-m} \, .
+\end{equation}
+Let 
+\begin{equation}
+	\eta = \frac{\Gamma(a) \Gamma(b)}{\Gamma(a+b)} \binom{N}{m} \theta^{m} \frac{1}{p(D)} \, .
+\end{equation}
+Obviously, the normalizing factor $\eta$ does not depend on $\theta$ and the resulting posterior is computed by the product of prior and likelihood
+\begin{equation}
+	p(\theta | D) = \eta \theta^{m+a-1}(1-\theta)^{N+b-m-1} \, ,
+\end{equation}
+which is a Beta-distribution again. Consequently the resulting posterior is $Beta(m+a, N+b-m) = Beta(m+a, l+b)$ distributed.
+The mean of a $Beta(a,b)$ distribution is 
+\begin{equation}
+	X \sim Beta(a,b) \quad , \quad E\left[X\right] = \frac{a}{a+b} \, .
+\end{equation}
+For the prior mean we get
+\begin{equation}
+	E\left[\theta\right] = \frac{a}{a+b} \, ,
+\end{equation}
+for the posterior mean it follows that
+\begin{equation}
+	E\left[\theta | D\right] = \frac{m+a}{m+l+a+b} \, ,
+\end{equation}
+and finally the maximum likelihood estimate is 
+\begin{equation}
+	\theta_{MLE} = \frac{m}{m+l} \, .
+\end{equation}
+Still to show:
+\begin{equation}
+	\exists \lambda \in \left[0, 1\right]: E\left[\theta|D\right] = \lambda E\left[\theta\right] + (1-\lambda)\theta_{MLE} \, .
+\end{equation}
+
+Combining this with the results for the single estimates yields
+\begin{equation}
+	\frac{m+a}{m+l+a+b} = \lambda \frac{a}{a+b} + (1-\lambda) \frac{m}{m+l} \, 
+\end{equation}
+solving for $\lambda$ yields
+\begin{equation}
+	\lambda = \frac{b+a}{N+a+b} \, .
+\end{equation}
+As all number are positive is follows that $0 < \lambda < 1$. \qed.
+
+\section{Poison Distribution}
+\subsection{Problem 5}
+Let $X \sim Poi(\lambda)$ be Poisson distributed. An experiments with $n$ i.i.d. samples was performed and $k$ hits were observed.
+It follows that the likelihood function is
+\begin{equation}
+	p(\lambda | n, k) = \frac{\lambda^k}{k!} e^{-\lambda} \, .
+\end{equation}
+The maximum likelihood estimate is computed setting the first derivative with respect to $\lambda$ to zero. Therefore the log likelihood is computed
+\begin{equation}
+	\log p(\lambda | n, k) = k \log \lambda - \log k! - \lambda \, ,
+\end{equation}
+and the first derivative is set to zero
+\begin{equation}
+	0 \overset{!}{=} \frac{d}{d\lambda}\log p(\lambda | n, k) = \frac{k}{\lambda} - 1 \, .
+\end{equation}
+And it follows that $\lambda_{MLE} = k$.
+
+For the MAP a $Gamma(\alpha, \beta)$ distributed prior is used. It follows that $\lambda$ is distributed according to
+\begin{equation}
+	p(\lambda | \alpha, \beta) = \frac{\beta^\alpha \lambda^{\alpha-1}e^{-\beta \lambda}}{\Gamma(\alpha)}
+\end{equation}
+For the posterior distribution we get
+\begin{equation}
+	p(\lambda | D) = \frac{\frac{\beta^\alpha \lambda^{\alpha-1} e^{-\beta \lambda}}{\Gamma (\alpha)} \frac{\lambda^k}{k!}e^{-\lambda}}{p(D)} = \eta \lambda^{k+\alpha-1} e^{-(\beta+1)\lambda} \, .
+\end{equation}
+Thus the posterior is $Gamma(k+\alpha, \beta+1)$ distributed. An the maximum a posteriori estimate becomes
+\begin{equation}
+	\lambda_{MAP} = \frac{k+\alpha-1}{\beta+1} \, .
+\end{equation}
+\end{document}
