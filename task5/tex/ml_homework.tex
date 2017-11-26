@@ -1,6 +1,6 @@
 \documentclass{scrartcl}
 \usepackage[utf8]{inputenc}
-\usepackage[UKenglish]{babel}
+\usepackage[english]{babel}
 \usepackage{caption}
 \usepackage{listings}
 \usepackage{pdfpages}
@@ -17,5 +17,19 @@
 
 \begin{document}
 \maketitle
-	
+
+\section{Linear Separability}
+\subsection{Problem 1}
+
+The given convex hulls intersect, therefore we have 
+\begin{equation}
+	\exists \mathbf{u} \in \text{co}\mathcal{X} \cap \text{co}\mathcal{Y} : \mathbf{u} = \sum_i \alpha_{x,i} \mathbf{x}_i = \sum_j \alpha_{y,j} \mathbf{y}_j \, .
+\end{equation}
+
+A linear separator $v$, described by the parameters $\mathbf{w}$ and $w_0$, must satisfy $\forall \mathbf{x} \in \text{co}\mathcal{X}: v(\mathbf{x}) = \mathbf{w}^\top \mathbf{x}+ w_0 \ge 0$ and  $\forall \mathbf{y} \in \text{co} \mathcal{Y}: v(\mathbf{x}) = \mathbf{w}^\top \mathbf{y} + w_0 < 0$.
+The linear model and the convex hull can directly be combined and for a point $\mathbf{x}$ in the convex hull $\text{co}\mathcal{X}$ we get
+\begin{equation}
+	v(\mathbf{x}) = \sum_i \mathbf{w}^\top (\alpha_{x,i} \mathbf{x}_i) + w_0 = \sum_i \alpha_{x,i} \left(\mathbf{w}^\top \mathbf{x}_i + w_0\right) \, .
+\end{equation}
+
 \end{document}
