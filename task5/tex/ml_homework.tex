@@ -32,4 +32,49 @@ The linear model and the convex hull can directly be combined and for a point $\
 	v(\mathbf{x}) = \sum_i \mathbf{w}^\top (\alpha_{x,i} \mathbf{x}_i) + w_0 = \sum_i \alpha_{x,i} \left(\mathbf{w}^\top \mathbf{x}_i + w_0\right) \, .
 \end{equation}
 
+Consider $y(\mathbf{u})$:
+\begin{equation}
+	y(\mathbf{u}) = \sum_i \alpha_{x,i} \left(\mathbf{w}^\top \mathbf{x}_i + w_0\right)= \sum_j \alpha_{y,i} \left(\mathbf{w}^\top \mathbf{y}_j + w_0\right) \, ,
+\end{equation}
+which cannot be true if the sets $\mathcal{X}$ and $\mathcal{Y}$ are linearly separable. \qed
+
+\subsection{Problem 2}
+Given is a linearly separable dataset with two classes $C_1$ and $C_2$. The weight vector with the bias term included separates the classes, where the value at the points of the decision boundary $\mathbf{x}_{*}$ is $\mathbf{w}^\top \mathbf{x}_* = 0$. Setting the magnitude to infinity yields the following function
+\begin{equation}
+	\lim_{|\mathbf{w}| \rightarrow \infty} \mathbf{w}^\top \mathbf{x} = \begin{cases}
+		\infty, &\text{ if }\mathbf{x} \in C_1\\
+		-\infty, &\text{ if }\mathbf{x} \in C_2\\
+		0, &\text{ }\mathbf{x}\text{ is on the boundary.}
+	\end{cases}
+\end{equation}
+Taking the sigmoid function of $\mathbf{w}^\top \mathbf{x}$ gives a unit step function.
+In order to prevent this degeneration, regularization on the elements of $\mathbf{w}$ is required.
+
+\subsection{Problem 3}
+\begin{equation}
+	\phi(x_1, x_2) = \arctan \frac{x_2}{x_1} \, .
+\end{equation}
+
+\section{Basis Functions}
+\subsection{Problem 4}
+For every point $\mathbf{x}$ on the decision boundary we have
+\begin{equation}
+	w_0 + w_1 x_1 + x_2 x_2 = 0 \, .
+\end{equation}
+Using the given intersection points with the principal axes, we get
+\begin{equation}
+	w_0 + 2w_1 = 0
+\end{equation}
+and  
+\begin{equation}
+	w_0 + 5w_2 = 0 \, .
+\end{equation}
+Choosing $w_0 = -10$ yields $w_1 = 5$ and $w_2 = 2$.
+Finally, we get the parameter vector 
+\begin{equation}
+	\mathbf{w} = \begin{pmatrix}
+		-10\\5\\2
+	\end{pmatrix} \, .
+\end{equation}
+
 \end{document}
