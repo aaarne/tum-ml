@@ -97,4 +97,42 @@
 	Again, the maximum of two functions is convex if all functions that are considered for the maximum are convex.
 	The function $g(x) = x^2 -4x+32$ is convex as $g''(x) = 2 > 0$. For $h(x) = -2\log(2x)$ we get $h'(x) = -\frac{2}{x}$ and $h''(x) = \frac{2}{x^2} \ge 0 \forall x \in \mathbb{R}^+$. Therefore, $f$ is convex. \qed
 \end{itemize}
+
+\subsection{Problem 2}
+Let $f_1: \mathbb{R}^d \rightarrow \mathbb{R}$ and $f_2: \mathbb{R}^d \rightarrow \mathbb{R}$ be convex. Therefore it holds that (by the definition of convexity):
+\begin{equation}
+	\forall f \in \{f_1, f_2\} \, \forall x,y\in \mathbb{R}^d: \lambda f(x) + (1- \lambda)f(y) \ge f(\lambda x + (1- \lambda)y) \text { for } \lambda \in [0, 1]\, .
+\end{equation}
+The objective is to prove that $h(x) = f_1(x) + f_2(x)$ is convex. This can be proven straightforwardly by using the definition of convexity
+\begin{eqnarray}
+	\lambda h(x) + (1- \lambda)h(y) &=& \lambda(f_1(x) + f_2(x)) + (1- \lambda)(f_1(y) + f_2(y))\\
+	&=& \lambda f_1(x) + (1- \lambda)f_1(y) + \lambda f_2(x) + (1- \lambda)f_2(y)\\
+	&\ge& f_1(\lambda x + (1- \lambda)y) + f_2(\lambda x + (1- \lambda)y)\\
+	&=& h(\lambda x + (1- \lambda)y).
+\end{eqnarray} \qed
+
+\subsection{Problem 3}
+
+Consider the following convex functions on $\mathbb{R}$
+\begin{itemize}
+	\item $f_1(x) = x^2$
+	\item $f_2(x) = x$.
+\end{itemize}
+$f_1(x)$ is convex as $f_1''(x) = 2 > 0$ and $f_2$ is convex as we know that all linear functions are both convex and concave.
+Now consider the function $g(x)$, which is the product of $f_1$ and $f_2$. We obtain
+\begin{equation}
+	g(x) = f_1(x) f_2(x) = x^2 \cdot x = x^3 \, .
+\end{equation}
+The second derivative $g''(x) = 6x$ is negative for $x \in \mathbb{R}^-$. Therefore, we found one example for a non-convex function, which is the product of convex functions and we conclude that the product of convex functions is in general not necessarily convex. \qed
+
+\section{Minimization of Convex Functions}
+
+\subsection{Problem 4}
+We can argue by contradiction. Consider the global minimum $\theta_g$ and a (hypothetical) local minimum $\theta_l$ where $\theta_g \neq \theta_l$ and (wlog) $\theta_l < \theta_g$. As $\theta_g$ and $\theta_l$ are both minima, the second derivative is positive those points. Hence, the functions leaves both minima with positive slope in positive $\theta$-direction. Therefore, it must hold that $\exists \tilde{\theta}\in(\theta_l, \theta_g): f(\tilde{\theta}) > f(\theta_l) \wedge f(\tilde{\theta}) > f(\theta_g)$.
+There must be a point $\tilde{\theta}$ in between the local and the global minimum where the function value is greater than those a the minima. This is a contradiction as $f$ is convex. \qed
+
+
+\section{Gradient Descent}
+See the pdf pages attached.
+\includepdf[pages=-]{../06_hw_optimization_logistic_regression_v2}
 \end{document}
