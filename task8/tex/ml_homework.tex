@@ -10,12 +10,81 @@
 
 \lstset{frame=single,keepspaces=true,captionpos=b}
 
-\title{Homework xx - subject}
+\title{Homework 08 - Soft-margin SVM and Kernels}
 \author{Arne Sachtler - \textit{Registration Number: 03692662}}
 \date{\today}
 \subtitle{IN2064 Machine Learning}
 
 \begin{document}
 \maketitle
-	
+
+\section{Soft-margin SVM}
+\subsection{Problem 1}
+Using a soft-margin support vector machine ensures, that the $\alpha$'s cannot go to infinity as the are constraint to lie within $0$ and $C$. In the hard-margin case the support vector machine can overfit as soon as a single outlier appears. The soft-margin SVM does not guarantee that all training sample are assigned with the correct label as outlier may lie on the wrong side of the soft-margin SVM plane.
+
+\subsection{Problem 2}
+The first observation is, that a choice of $C < 0$ is definitely a bad one. The objective function for soft-margin SVM's is
+\begin{equation}
+	f_0(\mathbf{w},b,\xi) = \frac{1}{2}\mathbf{w}^\top \mathbf{w} + C \sum \xi_i \, ,
+\end{equation}
+which is minimized. Therefore the sum over the $\xi_i$'s is maximized and the SVM tries to assign the labels as bad as possible. It would flip the decision boundary such that the normal vector of the decision hyperplane is inverted.
+
+\section{Kernels}
+\subsection{Problem 3}
+Task: Show that for $c \ge 0$ and $d \in \mathbb{N}^+$ 
+\begin{equation}
+	K(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^\top \mathbf{y} + c)^d
+\end{equation}
+is a valid kernel.
+
+Using Binomial law the polynomial in the function $K$ can be rewritten to
+\begin{eqnarray}
+	K(\mathbf{x}, \mathbf{y}) &=& (\mathbf{x}^\top \mathbf{y} + c)^d\\
+	&=& \sum\limits_{k=0}^d \binom{d}{k} \left(\sum\limits_i x_i y_i\right)^{d-k} c^k\\
+	&=& \sum\limits_{k=0}^{d}\sum\limits_i \binom{d}{k} c^k x_i^{d-k}y_i^{d-k}\, .
+\end{eqnarray}
+Observing the latter expression already looks like a scalar product. One can define a feature map $\varphi$ where the function $K$ is the dot product. This feature map can be designed straightforwardly from the developed expression.
+\begin{equation}
+	\varphi(\mathbf{x}) = \begin{pmatrix}
+		x_1^d & \ldots & x_n^d & \sqrt{dc}\,x_1^{d-1} & \ldots & \sqrt{dc}\,x_n^{d-1} & \sqrt{\binom{d}{2}c^2}\,x_1^{d-2} & \ldots & \sqrt{c^d}\, x_n\\
+	\end{pmatrix}^\top
+\end{equation} 
+Consequently,
+\begin{equation}
+	\varphi(\mathbf{x})^\top \varphi(\mathbf{y}) = K(\mathbf{x}, \mathbf{y}) = (\mathbf{x}^\top \mathbf{y} + c)^d
+\end{equation}
+and $K$ is a valid kernel as it is a scalar product in the feature space $\varphi(\mathbf{x})$. \qed
+
+\section{Gaussian Kernel}
+
+\subsection{Problem 4}
+No, we can't. The feature map $\varphi_\infty (x)$ transforms into an infinite-dimensional feature space. That can never be computed in finite time and stored in a finite amount of memory. The computation of the feature map $\varphi_\infty(x)$ is simply physically impossible.
+
+\subsection{Problem 5}
+We simply try to express the dot-product of the infinite-dimensional feature space using the sum-expression. Afterwards, simplifications and a Taylor series yield a closed-form result for the dot-product of two infinite-dimensional vectors. The Taylor series of the exponential function 
+\begin{equation}\label{exp}
+	\exp (x) = \sum\limits_{i=0}^\infty \frac{x^i}{i!}
+\end{equation}
+is used.
+
+We start with the expression for the dot-product
+\begin{eqnarray}
+	\varphi_\infty (x)^\top \varphi_\infty (y) &=& \sum\limits_{i=0}^\infty \frac{\exp\left(-\frac{x^2+y^2}{2 \sigma^2}\right)}{\sqrt{i!}\sqrt{i!}} \frac{(xy)^i}{\sigma ^{2i}}\\
+	&=& \exp\left(-\frac{x^2+y^2}{2 \sigma^2}\right) \sum\limits_{i=0}^{\infty}\frac{(xy)^i}{i! \sigma^{2i}}\\
+	&=& \exp\left(-\frac{x^2+y^2}{2 \sigma^2}\right) \sum\limits_{i=0}^{\infty} \frac{1}{i!}\left(\frac{xy}{\sigma^2}\right)^i\\
+	&\underset{eq. \ref{exp}}{=}&  \exp\left(-\frac{x^2+y^2}{2 \sigma^2}\right)\exp\left(\frac{xy}{\sigma^2}\right)\\
+	&=& \exp \left(-\frac{\left(x - y\right)^2}{2 \sigma^2}\right) \, ,
+\end{eqnarray}
+and find a closed form solution for the dot-product of two feature-transformed vectors.
+
+\subsection{Problem 6}
+Yes. For very shallow Gaussian's ($\sigma \rightarrow 0$) each point in the original data space is transformed onto an own dedicated axis. Imagine in the feature transformed space there exists one axis that shows how $(0, 0)$-ish a point is, how $(0, 0.1)$-ish a point is and so on. Here the example is shown in 2D but it is valid for any finite dimensional space. Then the data becomes linearly separable. Ultimately, if $\sigma$ can be chosen arbitrarily, the choice of $\sigma \rightarrow 0$ results in a linearly separable feature space for every input.
+
+\section{Kernelized $k$-nearest Neighbours}
+\begin{eqnarray}
+|| \varphi (\mathbf{x}) - \varphi(\mathbf{y}) || &=& \sqrt{\left(\varphi\left(\mathbf{x}) - \varphi(\mathbf{y}\right)\right)^\top \left(\varphi\left(\mathbf{x}) - \varphi(\mathbf{y}\right)\right)}\\	
+&=& \sqrt{\varphi^\top (\mathbf{x})\varphi(\mathbf{x}) - 2\varphi^\top (\mathbf{x}) \varphi(\mathbf{y}) + \varphi^\top(\mathbf{y}) \varphi(\mathbf{y})}\\
+&=& \sqrt{K(\mathbf{x}, \mathbf{x}) - 2K(\mathbf{x}, \mathbf{y}) + K(\mathbf{y}, \mathbf{y})} \, .
+\end{eqnarray}
+
 \end{document}
