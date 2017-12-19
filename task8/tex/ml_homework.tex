@@ -81,6 +81,7 @@ and find a closed form solution for the dot-product of two feature-transformed v
 Yes. For very shallow Gaussian's ($\sigma \rightarrow 0$) each point in the original data space is transformed onto an own dedicated axis. Imagine in the feature transformed space there exists one axis that shows how $(0, 0)$-ish a point is, how $(0, 0.1)$-ish a point is and so on. Here the example is shown in 2D but it is valid for any finite dimensional space. Then the data becomes linearly separable. Ultimately, if $\sigma$ can be chosen arbitrarily, the choice of $\sigma \rightarrow 0$ results in a linearly separable feature space for every input.
 
 \section{Kernelized $k$-nearest Neighbours}
+\subsection{Problem 7}
 \begin{eqnarray}
 || \varphi (\mathbf{x}) - \varphi(\mathbf{y}) || &=& \sqrt{\left(\varphi\left(\mathbf{x}) - \varphi(\mathbf{y}\right)\right)^\top \left(\varphi\left(\mathbf{x}) - \varphi(\mathbf{y}\right)\right)}\\	
 &=& \sqrt{\varphi^\top (\mathbf{x})\varphi(\mathbf{x}) - 2\varphi^\top (\mathbf{x}) \varphi(\mathbf{y}) + \varphi^\top(\mathbf{y}) \varphi(\mathbf{y})}\\
