@@ -4,7 +4,8 @@
 \usepackage{caption}
 \usepackage{listings}
 \usepackage{pdfpages}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,dsfont}
+\usepackage{nth}
 
 \newcommand{\qed}{\hfill $\blacksquare$}
 
@@ -17,5 +18,108 @@
 
 \begin{document}
 \maketitle
-	
+\section{Activation Functions}
+\subsection{Problem 1}
+Basis function make intrinsically linearly inseparable data separable.
+Additionally, without activation functions the concatenation of multiple neurons would make no sense as all linear operation could than be combined to one single linear operator.
+
+\subsection{Problem 2}
+Consider a neuron of the hidden layers in the tanh-network and the sigmoid-network, respectively.
+Each neuron has a affine operation to the input variables and an activation function.
+Using the identity $e^{-x} = e^{-\frac{1}{2}x - \frac{1}{2}x} = \frac{\exp(-\frac{1}{2}x)}{\exp(\frac{1}{2}x)}$ and starting with the sigmoid function we can express sigmoid in terms of tanh
+\begin{eqnarray}
+	\sigma(x) &=& \frac{1}{1+e^{-x}}\\
+	&=& \frac{e^{\frac{1}{2}x}}{e^{\frac{1}{2}x} + e^{-\frac{1}{2}x}}\\
+	&=& \frac{1}{2}\frac{2e^{\frac{1}{2}x}}{e^{\frac{1}{2}x} + e^{-\frac{1}{2}x}}\\
+	&=& \frac{1}{2}\left(\frac{e^{\frac{1}{2}x} + e^{-\frac{1}{2}x}}{e^{\frac{1}{2}x} + e^{-\frac{1}{2}x}}\right)\\
+	&=& \frac{1}{2}\left(\tanh \frac{x}{2} + 1\right)
+\end{eqnarray}
+Now again consider a neurons in the neural network with $\tanh$ activation functions. 
+If the affine mapping in the neurons scales the input by $\frac{1}{2}$ and adds a bias of $1$ the neuron models a sigmoid function. The next neurons again weight the inputs of the previous layer and add biases accordingly.
+
+\subsection{Problem 3}
+Derivative of tanh:
+\begin{eqnarray}
+	\frac{d}{dx}\tanh (x) &=& \frac{d}{dx} \frac{e^x - e^{-x}}{e^x + e^{-x}}\\
+	&=& \frac{(e^x + e^{-x})(e^x + e^{-x}) - (e^x - e^{-x})(e^x - e^-x)}{(e^x + e^{-x})^2}\\
+	&=& 1 - \frac{(e^x - e^{-x})^2}{(e^x + e^{-x})^2}\\
+	&=& 1 - \tanh^2(x)
+\end{eqnarray}
+The property of the function itself appearing in the derivative is useful as previously computed values can be reused.
+
+\subsection{Problem 4}
+The $\tanh$ should be used as its range is from $-1$ to $1$. 
+The loss function can be computed by
+\begin{equation}
+	E(\mathbf{W}) = \sum_{i=1}^{N}\left(\mathds{1}(y_1 = 1) (1 - f(x_i, \mathbf{W})) + \mathds{1}(y_i = -1) (f(x_i, \mathbf{W}) + 1)\right)
+\end{equation}
+
+\section{Optimization}
+\subsection{Problem 5}
+For the derivative of the loss we get
+\begin{equation}
+	\frac{dE}{d \mathbf{w}} = \frac{1}{m} \sum_i -\mathbf{x}_i \cdot l'(y_i - \mathbf{w}^\top \mathbf{x}_i) + \lambda ||\mathbf{w}|| \, 
+\end{equation}
+where
+\begin{equation}
+	l'(\eta) = \begin{cases}
+		1 & \text{ if } \eta \ge 1, \\
+		-1 & \text{ if } \eta \le -1,\\
+		\eta & \text{ otherwise.}
+	\end{cases}
+\end{equation}
+
+\subsection{Problem 6}
+I would stop training as soon as the validation error starts to rise again. In the example is approximately at the \nth{50} iteration.
+
+\section{Numerical Instability}
+\subsection{Problem 7}
+\begin{eqnarray}
+a + \log \sum_i e^{x_i - a} &=& a + \log \sum_i \frac{e^{x_i}}{e^a}\\
+&=& a + \log \left(\frac{1}{e^a} \sum_i e^{x_i}\right)\\
+&=& a + \log \frac{1}{e^a} + \log \sum_i e^{x_i}\\
+&=& \log \sum_i e^{x_i}\, .
+\end{eqnarray}
+\qed
+
+\subsection{Problem 8}
+In both the numerator and the denominator the factor $\frac{1}{e^a}$ can be factorized out and the fraction can be reduced. In the denominator the factor $\frac{1}{e^a}$ can be factorized out as it is a constant factor in the sum. \qed
+
+\subsection{Problem 9}
+First the logarithmic sigmoid functions are computed.
+We get
+\begin{equation}
+	\log \sigma (x) = \log \frac{1}{1+e^{-x}} = -\log (1+e^{-x})
+\end{equation} 
+and 
+\begin{equation}
+	\log (1- \sigma(x)) = \log \frac{e^{-x}}{1+e^{-x}} = -x -\log (1+e^{-x}) \, .
+\end{equation}
+Afterwards the binary cross entropy can be reformulated straightforwardly
+\begin{eqnarray}
+	&&-(y\log(\sigma(x)) + (1-y) \log (1- \sigma(x)))\\
+	&=& y\log(1+ e^{-x}) - (1-y) (-x - \log (1+e^{-x}))\\
+	&=& y\log(1+ e^{-x}) + x + \log(1+ e^{-x}) - xy -y\log(1+e^{-x})\\
+	&=& x -xy + \log (1+e^{-x})\, .
+\end{eqnarray}
+The latter result is fine for $x\ge0$. For negative $x$ the result may get unstable as $e^{-x}$ for $x << 0$ goes to high numbers.
+Using the identity $1 = e^x e^{-x}$ the result can be modified to avoid the unstable exponential.
+Starting with the last expression we get
+\begin{eqnarray}
+	&&x + \log (1+e^{-x}) - xy\\
+	&=& x - xy + \log (e^x e^{-x} + e^{-x})\\
+	&=& x - xy + \log(e^{-x}(e^x + 1))\\
+	&=& -xy + \log(1+e^x)\, .
+\end{eqnarray}
+Combining these we get
+\begin{eqnarray}
+&&-(y\log(\sigma(x)) + (1-y) \log (1- \sigma(x)))\\
+&=& \begin{cases}
+	x -xy + \log (1+e^{-x}) & \text{ if } x\ge 0,\\
+	-xy + \log(1+e^x) & \text{ if } x<0.
+\end{cases}\\
+&=& \max(0,x) - xy + \log(1+e^{-|x|})\, .
+\end{eqnarray}
+\qed
+
 \end{document}
