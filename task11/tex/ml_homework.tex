@@ -1,0 +1,58 @@
+\documentclass{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{caption}
+\usepackage{listings}
+\usepackage{pdfpages}
+\usepackage{amsmath,amssymb}
+\usepackage{biblatex}
+
+\newcommand{\qed}{\hfill $\blacksquare$}
+
+\lstset{frame=single,keepspaces=true,captionpos=b}
+
+\title{Homework 11 - Clustering}
+\author{Arne Sachtler - \textit{Registration Number: 03692662}}
+\date{\today}
+\subtitle{IN2064 Machine Learning}
+\bibliography{bib}
+\begin{document}
+\maketitle
+\section{Gaussian Mixture Model} % (fold)
+\label{sec:gaussian_mixture_model}
+
+% section gaussian_mixture_model (end)
+
+\subsection{Problem 1}
+Given the mixture of Gaussian
+\begin{equation}
+	p(x) = \sum_{k=1}^K \pi_k \mathcal{N}(x | \mu_k, \Sigma_k)
+\end{equation}
+the expected value can be derived straightforwardly
+\begin{eqnarray}
+E[x] &=& \int x \left(\sum_{k=1}^K \pi_k \mathcal{N}(x | \mu_k, \Sigma_k)\right)dx\\
+&=& \int \sum_{k=1}^K x\pi_k \mathcal{N}(x | \mu_k, \Sigma_k)dx\\
+&=& \sum_{k=1}^K \int x\pi_k \mathcal{N}(x | \mu_k, \Sigma_k)dx\\
+&=& \sum_{k=1}^K \pi_k \int x \mathcal{N}(x | \mu_k, \Sigma_k)dx\\
+&=& \sum_{k=1}^K \pi_k \mu_k \, .
+\end{eqnarray}
+
+For the covariance we know $Cov[x] = E[xx^\top] - E[x]E[x]^\top$, so the only unknown quantity is $E[xx^\top]$. This can be computed using the theorem in the Bishop book \cite[p. 82]{Bishop:2006:PRM:1162264}
+\begin{equation}
+	E[xx^\top] = \sum_{k=1}^K \pi_k (\mu_k \mu_k^\top + \Sigma_k)\, .
+\end{equation}
+And finally we get
+\begin{equation}
+	Cov[x] = \sum_{k=1}^K \pi_k (\mu_k \mu_k^\top + \Sigma_k) + \sum_{k=1}^K \pi_k \mu_k \sum_{k=1}^K \pi_k \mu_k^\top \, .
+\end{equation}
+
+\subsection{Problem 2}
+Using the isotropic Gaussians with a covariance of (in the limit) zero, the responsibilities are hard decision values. Given a data point the responsibility is implicitly set to one for that Gaussian whose mean is closest among all Gaussians of the mixture model.
+Afterwards in the M-step the covariances are not updated at all as they are constant and given by assumption. The means are the unweighed sample means of the data points for each cluster as in the Lloyds algorithms for k means. Finally, the $N_k$ become natural numbers again as the responsibilities are in $\mathbb{N}$.
+\subsection{Problem 3}
+See the pdf pages attached.
+
+\printbibliography
+\includepdf[pages=-]{11_homework_clustering}
+
+\end{document}
